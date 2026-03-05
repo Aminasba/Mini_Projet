@@ -1,14 +1,30 @@
 package pharmacie.entity;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Getter @Setter @NoArgsConstructor @RequiredArgsConstructor @ToString
@@ -35,4 +51,16 @@ public class Categorie {
 	@JsonIgnoreProperties({"categorie", "lignes"})
 	private List<Medicament> medicaments = new LinkedList<>();
 
+
+	@ManyToMany(mappedBy = "categories")
+@JsonIgnore
+private Set<Fournisseur> fournisseurs = new HashSet<>();
+
+// Ajouter ce getter
+public Set<Fournisseur> getFournisseurs() {
+    if (this.fournisseurs == null) {
+        this.fournisseurs = new HashSet<>();
+    }
+    return this.fournisseurs;
+}
 }
